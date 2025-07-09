@@ -1,7 +1,7 @@
 {
-  "name": "bro mint",
-  "version": "1.0.0",
-  "description": "A minting centre for Cardano native tokens that utilizes the connected multisig wallet",
+  "name": "pact mint",
+  "version": "1.1.0",
+  "description": "A minting centre for Cardano native tokens that utilizes the connected multisig or smart wallet",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
