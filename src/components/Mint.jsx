@@ -10,7 +10,7 @@ import { createCIP141Transaction } from "cip141-lucidevolution";
 
 const Mint = (props) => {
     const [sharedMetadata, setSharedMetadata] = useState([]);
-    const [tokens, setTokens] = useState([{token: "", amount: 1, metaData: [], defaultImage: null}]);
+    const [tokens, setTokens] = useState([{token: "", amount: 1, metaData: [], defaultImage: null , disableMetadata: false}]);
     const [walletPickerOpen, setWalletPickerOpen] = useState(false);
     const [errorMessage , setErrorMessage] = useState("");
 
@@ -124,6 +124,13 @@ const Mint = (props) => {
         setTokens(newTokens);
     }
 
+    const setTokenDisableMetadata = (disableMetadata, index) => {
+        console.log("set token disable metadata")
+        const newTokens = [...tokens];
+        newTokens[index].disableMetadata = disableMetadata;
+        setTokens(newTokens);
+    }
+
  
 
     function stringToHex(str) {
@@ -194,7 +201,7 @@ const Mint = (props) => {
         metadata[policyId] = {}
 
         tokens.forEach((token) => {
-            if (token.amount > 0) {
+            if (token.amount > 0 && !token.disableMetadata) {
                 metadata[policyId][token.token] = {}
                 metadata[policyId][token.token]["name"] = token.token
 
@@ -278,10 +285,14 @@ const Mint = (props) => {
     const tokensJSX =  <div key={tokens.length}>
         {tokens.map((token, index) => 
             <div className="tokenListing" key={index}>
+                <button className="removeTokenButton" onClick={() => {removeToken(index)}}>x</button>
+
                 <input type="text" onChange={(e) => setTokenName(e.target.value ,index)} id="token" placeholder="Token" value={token.name} className="Address"/>
                 <input type="number" onChange={(e) => setTokenAmount(e.target.value , index)}  placeholder="Amount" />  
+                
+                <span>Disable metadata<input type="checkbox" onChange={(e) => setTokenDisableMetadata(e.target.checked , index)}  placeholder="Disable metadata" /></span>
+                {!token.disableMetadata && <div>
                 <button onClick={() => {addMetadaField(index)}}>Add metadata field</button>
-                <button onClick={() => {removeToken(index)}}>x</button>
                 <MyDropzone loadImage={addImage} index={index}/>
                 <div className="imagesList">
                 {tokens[index].images && tokens[index].images.map((image, index3) =>
@@ -298,6 +309,7 @@ const Mint = (props) => {
                         <button onClick={() => {removeMetadaField(index, index2)}}>x</button>
                     </div>
                 )}
+                </div>}
             </div>
         ) }
         </div>
