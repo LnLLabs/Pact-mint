@@ -44,7 +44,8 @@ const Mint = (props) => {
         const amount = 1
         const metaData = []
         console.log("add token")
-        const newTokens= [...tokens,{token, amount, metaData}];
+        const newTokens = [...tokens]
+        newTokens.push({token, amount, metaData, disableMetadata: false})
         setTokens(newTokens); 
       
     }
@@ -212,7 +213,7 @@ const Mint = (props) => {
                         const newfile = {}
 
                         newfile["src"] =  "ipfs://" +  image.ipfsCID
-                        newfile["name"] = image.name
+                        newfile["name"] = image.name.split(".")[0]
                         newfile["mediaType"] = image.imageType
                         metadata[policyId][token.token]["files"].push(newfile)
                         if(index === token.defaultImage){
@@ -287,7 +288,7 @@ const Mint = (props) => {
             <div className="tokenListing" key={index}>
                 <button className="removeTokenButton" onClick={() => {removeToken(index)}}>x</button>
 
-                <input type="text" onChange={(e) => setTokenName(e.target.value ,index)} id="token" placeholder="Token" value={token.name} className="Address"/>
+                <input type="text" onChange={(e) => setTokenName(e.target.value ,index)} id="token" placeholder="Token" value={token.token} className="Address"/>
                 <input type="number" onChange={(e) => setTokenAmount(e.target.value , index)}  placeholder="Amount" />  
                 
                 <span>Disable metadata<input type="checkbox" onChange={(e) => setTokenDisableMetadata(e.target.checked , index)}  placeholder="Disable metadata" /></span>
